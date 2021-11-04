@@ -1,0 +1,59 @@
+source commands-environment-variables
+
+# Function:   awslocal_exec
+# Parameters: None
+# Description: Used by other functions to send a command to localstack.
+function awslocal_exec() {
+  docker exec -it localstack awslocal
+}
+
+# Function:    awslocal_ls_bucket_project
+# Parameters:  None
+# Description: Lists the files in S3 under <s3_directory>
+function awslocal_ls_bucket_project() {
+  awslocal --endpoint-url=http://localhost:4566 s3 ls s3://<s3_directory>
+}
+
+# Function:    awslocal_upload_test_project
+# Parameters:  None
+# Description: Uploads test.csv from your downloads directory to <project> in localstack
+function awslocal_upload_test_project() {
+  awslocal --endpoint-url=http://localhost:4566 s3 cp ${DOWNLOADS_HOME}/test.csv s3://<s3_directory>
+}
+
+# Function:    aws_download_test_project
+# Parameter:   1. S3_HOME - AWS Source directory
+# Parameter:   2. WORKSPACE - Local destination directory
+# Parameter:   3. SOURCE_FILENAME - Name of file to copy
+# Example:     aws_download_test_project WORKSPACE S3_HOME FILENAME
+function aws_download_test_csv() {
+  aws s3 cp ${1}/${3} ${2}/${3}
+}
+
+# Function:    aws_upload_test_project
+# Parameter:   1. Source
+# Parameter:   2. Destination
+# Parameter:   3. Filename
+# Description: Uploads <source>/<filename to <destination>/<filename> in S3
+function aws_upload_test_csv() {
+  aws s3 cp ${1}/${3} ${2}/${3}
+}
+
+set_venv_project() {
+  print_variable BIG_BRAIN_HOME
+}
+
+function aws_cp_file() {
+  print_variable SOURCE
+  print_variable DESTINATION
+  print_variable GZ_FILE
+  COMMAND="aws s3 cp ${SOURCE}/${GZ_FILE} ${DESTINATION}/${GZ_FILE}"
+  print_variable COMMAND
+  eval "${COMMAND}"
+}
+function aws_ls() {
+  DIRECTORY=${1}
+  COMMAND="aws s3 ls ${DIRECTORY}"
+  print_variable COMMAND
+  eval "${COMMAND}"
+}
