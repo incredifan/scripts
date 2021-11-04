@@ -1,0 +1,3 @@
+source ./commands-log
+
+l
