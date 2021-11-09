@@ -1,0 +1,1 @@
+PGPASSWORD=$PG_PASS psql -U $PG_USER -h $PG_HOST -d $TABLE -f $1

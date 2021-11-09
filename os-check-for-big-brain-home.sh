@@ -1,0 +1,2 @@
+source commands-environment-variables
+check_big_brain_home

@@ -1,0 +1,9 @@
+source commands-environment-variables
+source commands-mongo
+source commands-print
+
+print_double_line
+mongo_get_application_db_names
+mongo_get_auth
+mongo_drop_databases
+print_variable MONGO_DBS
