@@ -1,0 +1,8 @@
+source ./commands-environment-variables
+source ./commands-print
+
+function l() {
+  set_today
+  print_variable TODAY_IS
+  # echo ${1} >> LOGFILENAME
+}

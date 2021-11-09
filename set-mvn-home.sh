@@ -1,0 +1,2 @@
+source commands-environment-variables
+set_mvn_home
