@@ -1,0 +1,227 @@
+source ./commands-colors
+source ./commands-file-system
+source ./commands-print
+
+#------------------------------------------------------------------------------------
+function unset_variable() {
+  unset $1
+}
+#------------------------------------------------------------------------------------
+function check_variable() {
+  unset dumpname
+  if [[ -z "$1" ]]; then
+    echo "$1 not set."
+    exit 1
+  else
+    print_variable $1
+  fi
+}
+
+function set_variable() {
+  export $1=$2
+}
+
+function print_variable() {
+  echo "${INFO} "${1}
+  echo "${INFO}   "$(eval "echo \$$1")
+}
+#-------------------------------------------------------------------------------------
+function set_src_home() {
+  set_variable SRC_HOME /usr/local/src
+}
+function print_src_home() {
+  print_variable SRC_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_service_home() {
+  set_variable SERVICE_HOME ${SRC_HOME}/service
+}
+
+#-------------------------------------------------------------------------------------
+function set_big_brain_home() { 
+  set_variable BIG_BRAIN_HOME ~/bigbrain 
+}
+function print_big_brain_home() { 
+  print_variable BIG_BRAIN_HOME
+}
+function check_big_brain_home() {
+  check_variable BIG_BRAIN_HOME
+}
+
+#-------------------------------------------------------------------------------------
+function check_tools_home() {
+  check_variable TOOLS_HOME
+}
+function print_variable_tools_home() {
+  print_variable TOOLS_HOME
+}
+function set_tools_home() {
+  set_variable TOOLS_HOME ${GITLAB_HOME}/tools
+}
+#-------------------------------------------------------------------------------------
+function set_projects_home() { 
+  set_variable PROJECTS_HOME ${BIG_BRAIN_HOME}/projects
+}
+function print_projects_home() { 
+  print_variable PROJECTS_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_resources_home() {
+  set_variable RESOURCES_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_report_service_home() {
+  set_sp_src_home
+  set_variable REPORT_SERVICE_HOME ${SRC_HOME}}/report-service
+} 
+#-------------------------------------------------------------------------------------
+function set_pg_storage() {
+  set_variable PG_STORAGE ${BIG_BRAIN_HOME}/postgres_storage
+}
+function print_pg_storage() {
+  print_variable PG_STORAGE
+}
+function check_for_pg_storage_dir() {
+  check_for_directory $PG_STORAGE
+}
+#-------------------------------------------------------------------------------------
+function set_workspace() {
+  set_variable WORKSPACE $1
+}
+function print_workspace() {
+  print_variable WORKSPACE
+}
+#-------------------------------------------------------------------------------------
+function set_workspaces_home() {
+  set_big_brain_home
+  set_variable WORKSPACES_HOME ${BIG_BRAIN_HOME}/workspaces
+}
+#-------------------------------------------------------------------------------------
+function set_github_home() {
+  set_variable GITHUB_HOME=${BIG_BRAIN_HOME}/github
+}
+#-------------------------------------------------------------------------------------
+function check_gitlab_home() {
+  check_variable GITLAB_HOME
+}
+function set_gitlab_home() {
+  set_variable GITLAB_HOME ${BIG_BRAIN_HOME}/gitlab
+}
+function print_gitlab_home() {
+  print_variable GITLAB_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_import_work_home() {
+  set_variable IMPORT_WORK_HOME ${GITLAB_HOME}/import-work
+}
+function print_import_work_home() {
+  print_variable APPLICATION_CODE_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_my_scripts_home() {
+  set_variable MY_SCRIPTS_HOME ${GITLAB_HOME}/my-scripts-and-such
+}
+function print_my_scripts_home() {
+  print_variable MY_SCRIPTS_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_my_resources_home() {
+  # DGH20210708 - Resources should be relative to the project.
+  # set_variable MY_RESOURCES_HOME ${MY_SCRIPTS_HOME}/resources
+  set_variable MY_RESOURCES_HOME $1
+}
+function print_my_resources_home() {
+  print_variable MY_RESOURCES_HOME
+}
+#-------------------------------------------------------------------------------------
+function set_test_source_file() {
+  set_variable TEST_SOURCE_FILE ${MY_RESOURCES_HOME}/test2.csv
+}
+function print_test_source_file() {
+  print_variable TEST_SOURCE_FILE
+}
+function check_for_file() {
+  if [[ -f $1 ]]; then
+    echo success
+    return 1
+  else 
+    #err_file_does_not_exist
+    return -1
+  fi
+  if test -f test.csv; then
+    echo "success"
+  else
+    echo "faiil"
+  fi
+}
+
+ 
+#------------------------------------------------------------------------------------
+function print_env_vars() {
+  print_variable BIG_BRAIN_HOME
+  print_variable DEV_TOOLS_HOME
+  print_variable DOWNLOADS_HOME
+  print_variable GITHUB_HOME
+  print_variable GITLAB_HOME
+  print_variable IMPORT_WORK_HOME
+  print_variable MVN_HOME
+  print_variable PROJECTS_HOME
+  print_variable REPORT_SERVICE_HOME
+  print_variable SP_PG_STORAGE
+}
+function print_csh_home() {
+  print_variable CSH_HOME
+}
+function print_venv_csh() {
+  print_variable VENV_CSH
+}
+function set_csh_home() {
+  set_variable CSH_HOME ${PROJECTS_HOME}/CSH
+}
+function print_downloads_home() {
+  print_variable DOWNLOADS_HOME
+
+}
+function set_downloads_home() {
+  set_variable DOWNLOADS_HOME ~/Downloads
+}
+function set_venv_csh() {
+  set_variable VENV_CSH ${CSH_HOME}/venv-import-work
+}
+#------------------------------------------------------------------------------------
+function set_mvn_home() {
+  set_variable MVN_HOME ${BIG_BRAIN_HOME}/maven/apache-maven-3.6.3
+}
+function check_mvn_home() {
+  check_variable MVN_HOME
+}
+function print_mvn_home() {
+  print_variable MVN_HOME
+}
+#------------------------------------------------------------------------------------
+
+function set_today() {
+    TODAY_IS=$(date +"Today is %A, %d of %B")
+}
+function set_today_timestamp() {
+  TIMESTAMP_TODAY=$(date +"%Y%m%d")
+}
+
+function get_start_time() {
+  set_today
+  set_today_timestamp
+  check_for_file 
+  START_TIME=$(date +"$1 Start Time: %r") 
+  print_variable START_TIME
+}
+function get_finish_time() {
+  FINISH_TIME=$(date +"$1 Ending Time: %r")
+  print_variable FINISH_TIME
+}
+
+function set_application_code_home() {
+  APPLICATION_CODE_HOME=$CSH_SOURCE_HOME
+}
+function print_application_code_home() {
+  print_variable APPLICATION_CODE_HOME
+}

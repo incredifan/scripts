@@ -1,0 +1,30 @@
+source commands-print
+
+function check_for_file() {
+  echo checking for $1
+  if [[ -f ${1} ]]; then
+    echo "${SUCCESS} File found!"
+  else
+    echo "${ERROR} File NOT found!"
+  fi  
+}
+
+function check_return_code() {
+  if [[ $1 = 0 ]]
+  then
+    echo "${INFO} Test Passed ... Continuing"
+  else
+    echo "${ERROR} Test Failed ..."
+    echo "${ERROR}   Return Code: $1"
+    echo "${ERROR}   To Debug run the command manually"
+    echo "${LINE_RED_LONG}"
+    echo "${ERROR}   Exiting ..."
+    echo "${LINE_RED_LONG}"
+    exit -1
+  fi
+}
+
+function get_filenames_in_current_directory() {
+  FILENAMES=ls
+  eval "$FILENAMES" > filenames.txt
+}

@@ -1,0 +1,34 @@
+
+function elasticmq_run () {
+  docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -d roribio16/alpine-sqs:latest
+}
+
+function elasticmq_start() {
+  docker start alpine-sqs
+}
+function elasticmq_stop() {
+  docker stop alpine-sqs
+}
+
+function elasticmq_add_queue() {
+  command="aws " \
+    "--endpoint-url " \
+    "http://localhost:9324 " \
+    "sqs " \
+    "create-queue " \
+    "--queue-name " \
+    "${1} " \
+    "--attributes " \
+    "FifoQueue=true" 
+  eval($command)
+}
+
+# ${1} can be set in an rc file.
+function elasticmq_add_queue() {
+  elasticmq_add_queue ${1}
+}
+
+# ${1} be set in an rc file.
+function elasticmq_add_invoice_queue() {
+  elasticmq_add_queue ${1}
+}

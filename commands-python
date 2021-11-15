@@ -1,0 +1,102 @@
+
+function venv() {
+  # cd ${1:?"${ERROR} Must Provide venv home."}
+  python -m pip install -r requirements.txt
+  python -m pip install awscli-local
+}
+
+function venv_create() {
+  # python3 -m venv ${1:?"Must Provide a name for the venv"}
+  python3 -m venv .venv
+}
+
+function venv_activate() {
+  # cd ${1:?"Must Provide venv home."}
+  # source ${1}/bin/activate
+  source .venv/bin/activate
+  
+}
+
+function set_env_var_python_tutorial_env() {
+  set_github_home
+  export PYTHON_TUTORIAL_HOME=${GITHUB_HOME}/python-tutorials
+}
+
+function activate_venv_tutorial() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  source tutorial_env/bin/activate
+}
+# function create_venv_tutorial_env() {
+#  cd ${PYTHON_TUTORIAL_HOME}
+#  python3 -m venv tutorial_env
+# }
+
+function venv_tutorial_install_novas() {
+  cd ${PYTHON_TUTORIAL_HOME}
+#  # python -m pip install novas
+}
+
+function venv_tutorial_install_requests_260() {
+  cd ${PYTHON_TUTORIAL_HOME}
+#  python -m pip install requests==2.6.0
+}
+
+function install_pkg() {
+  python -m install $1
+}
+
+function venv_tutorial_update_requests() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+#  python -m pip install --upgrade requests
+}
+
+function venv_tutorial_uninstall_requests() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+#  python -m pip uninstall requests
+}
+
+function venv_tutorial_show_requests() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+#  pip show requests
+} 
+
+function venv_tutorial_show_novas() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+#  pip show novas
+} 
+
+function venv_tutorial_list_installed_packages() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+#  pip list
+} 
+
+function venv_tutorial_create_requirements_file() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+  pip freeze > requirements.txt
+}
+
+
+function venv_tutorial_install_from_requirements_file() {
+  cd ${PYTHON_TUTORIAL_HOME}
+  activate_venv_tutorial
+  python -m pip install -r requirements.txt
+}
+
+function activate_venv() {
+  cd ${1:"Virtual Environment Not Provided"}
+  source tutorial_env/bin/activate
+}
+
+function venv_install_requirements() {
+  cd ${1}
+  activate_venv ${2}
+  
+#   cd ${1:"Directory must be provided"}
+#   activate_venv ${2:"Virtual Environment not Provided"}
+}

@@ -1,0 +1,28 @@
+
+function print_error() {
+  printf "%s\n" "$*" >&2;
+}
+function print_double_line() {
+  echo "========================================================================="
+}
+
+function print_line() {
+    echo "-----------------------------------------------------------------------"
+}
+
+function print_current_directory() {
+  echo "${INFO} Current Directory:"
+  echo "${INFO}   ${PWD}"
+}
+
+function print_working_directory() {
+  echo "Current Working Directory:"
+  echo "  ${PWD}"
+}
+
+# function err_file_does_not_exist() {
+#   echo "${ERROR_LINE}"
+#   echo "${ERROR} File $1 does not exist.  Exiting"
+#   echo "${ERROR_LINE}"
+#   exit -1
+# }

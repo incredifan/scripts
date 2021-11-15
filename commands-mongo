@@ -1,0 +1,65 @@
+source commands-environment-variables
+source commands-file-system
+source commands-print 
+
+function mongo_get_<entry>() {
+  COMMAND="db.getCollection(\"<search_term>\").findOne({key:\"value\"})"
+}
+
+function mongo_show_collections() {
+  generate_mongo_command ${1} << EOF
+  show collections
+EOF
+}
+
+function mongo_show_databases() {
+  generate_mongo_command  <<EOF
+  show databases
+EOF
+}
+
+function mongo_connect() {
+  COMMAND="mongo \
+     --username $MONGO_USER \
+     --password $MONGO_PASS \
+     --authenticationDatabase admin \
+     --host $MONGO_HOST \
+     --port 27017"
+  print_variable COMMAND
+  eval "${COMMAND}"
+}
+
+function generate_mongo_command() {
+  DATABASE=${1}
+  MONGO_CMD="mongo \
+     --username $MONGO_USER \
+     --password $MONGO_PASS \
+     --authenticationDatabase admin \
+     --host $MONGO_HOST \
+     --port 27017 \
+     $DATABASE"
+  eval "${MONGO_CMD}"
+}
+
+function mongo_copy_from_qa() {
+  cd ${DEV_TOOLS_HOME}
+  ./mongocopy
+}
+
+function mongo_get_auth() {
+  MONGO_AUTH="--username $MONGO_USER --password $MONGO_PASS --authenticationDatabase admin"
+}
+
+function mongo_drop_databases() {
+  for db in $MONGO_DBS; do
+    echo Dropping $db
+    mongo $MONGO_AUTH $MONGO_HOST/$db --quiet --eval "db.dropDatabase();"
+  done
+}
+
+function mongo_create_dbs() {
+  for db in $MONGO_DBS; do
+    echo Creating $db
+    mongo $MONGO_AUTH $MONGO_HOST/$db --quiet --eval "use $db"
+  done
+}

@@ -1,0 +1,19 @@
+source ./commands-colors
+
+function vpn_connect() {
+  entering vpn_connect
+  command="networksetup -connectpppoeservice VPN"
+  echo "${INFO} $command"
+  `${command}`
+  exiting vpn_connect
+
+}
+
+function vpn_disconnect() {
+  entering vpn_disconnect
+  # command="networksetup -disconnectppoeservice VPN"
+  command="networksetup -disconnectpppoeservice VPN"
+  echo "${INFO} $command"
+  `${command}`
+  exiting vpn_disconnect
+}

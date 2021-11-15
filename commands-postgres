@@ -1,0 +1,140 @@
+source commands-environment-variables
+
+function fix_uuid_generatev4() {
+  sp start include=postgres ; docker exec -ti postgres psql -d finance -U postgres -c "create extension if not exists \"uuid-ossp\";" ;
+}
+
+function pg_restore_databases() {
+  ENVIRONMENT=${1}
+  set_pg_storage
+  get_application_database_names
+  for db in "${DB_NAMES[@]}"
+  do
+    NEW_DB_NAME=${ENVIRONMENT}_${db}
+    pg_run_restore ${NEW_DB_NAME} ${PG_STORAGE}/${NEW_DB_NAME}.dump
+  done
+}
+
+function pg_rename_sp_dbs() {
+  ENVIRONMENT=${1}
+  get_application_database_names
+  for db in "${DB_NAMES[@]}"
+  do
+    NEW_DB_NAME=${ENVIRONMENT}_${db}
+    echo "${INFO} Renaming Database ${NEW_DB_NAME} to ${db}"
+    pg_run_command "ALTER DATABASE ${NEW_DB_NAME} RENAME TO ${db}"
+  done
+}
+
+function pg_create_sp_dbs() {
+  ENVIRONMENT=${1}
+  get_application_database_names
+  for db in "${DB_NAMES[@]}"
+  do
+    NEW_DB_NAME=${ENVIRONMENT}_${db}
+    echo "${INFO} Creating Database $NEW_DB_NAME"
+    pg_run_command "CREATE DATABASE $NEW_DB_NAME"
+  done
+}
+
+function postgres_get_zipped_dbs_filename() {
+   dumpfile=`aws s3 ls s3://backups/postgres/${env}/ | awk '{print $4}' | tail -n 1`
+   set_variable GZ_FILE $dumpfile
+   print_variable GZ_FILE
+}
+
+function pg_drop_sp_dbs() {
+  get_application_database_names
+  for db in "${DB_NAMES[@]}"
+  do
+    echo "${INFO} Dropping $db"
+    pg_run_command "DROP DATABASE $db"
+  done
+}
+
+function pg_terminate_connections() {
+
+  get_application_database_names
+  for db in "${DB_NAMES[@]}"
+  do
+    echo "${INFO} Disconnecting from $db"
+    pg_run_command "SELECT pg_terminate_backend(pg_stat_activity.pid) \
+      from pg_stat_activity \
+      where pg_stat_activity.datname = '${db}'"
+  done
+
+}
+
+function remove_gz_extension() {
+  echo "${INFO}  Removing GZ extention"
+  echo "${INFO}  Original Filename:"
+  echo "${INFO}    ${1}"
+  x="${1}"
+  y=${x%.gz}
+  z=${y##*/}
+  echo "${INFO}  Updated Filename:"
+  echo "${INFO}    $z"
+  set_variable TAR_FILENAME $z
+}
+
+function connect_to_postgres() {
+  psql postgresql://$PG_USER:$PG_PASS@$PG_HOST
+}
+
+function pg_run_restore() {
+  DATABASE=${1}
+  DUMPFILE=${2}
+  PGPASSWORD=$PG_PASS pg_restore -h $PG_HOST -U $PG_USER --no-owner -d $DATABASE $DUMPFILE
+}
+
+function pg_run_command() {
+  psql postgresql://$PG_USER:$PG_PASS@$PG_HOST --command="${1}"
+} 
+
+function pg_run_command_on_db() {
+
+  # To use a file
+  # PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -d <db_name> -f 053.do.sql -U $PG_USER
+  PGPASSWORD=$PG_PASS psql -h 127.0.0.1 -d <db_name> -c "\l" -U $PG_USER
+}
+
+function reset_schemas() {
+  # Run: 
+  "DROP SCHEMA public CASCADE; CREATE SCHEMA public"
+  # from inside of <db_name> 
+}
+
+function pg_drop_db() {
+  pg_run_command "drop database ${1}"
+}
+
+function pg_create_db() {
+  pg_run_command "create database ${1} owner postgres"
+}
+
+function pg_list_databases() {
+  pg_run_command "\l"
+}
+
+function pg_get_zipped_dbs_filename() {
+  ENVIRONMENT=$1
+  dumpname=`aws s3 ls s3://backups/postgres/${ENVIRONMENT}/ | awk '{print $4}' | tail -n 1`
+  print_variable dumpname
+  set_variable GZ_FILE $dumpname
+  print_variable GZ_FILE
+}
+
+function pg_get_zipped_dbs_filename() {
+  env=qa
+  dumpname=`aws s3 ls s3://backups/postgres/${env}/ | awk '{print $4}' | tail -n 1`
+  set_variable GZ_FILE $dumpname
+}
+function pg_get_zipped_dbs_filename() {
+  env=automation
+  dumpname=`aws s3 ls s3://backups/postgres/${env}/ | awk '{print $4}' | tail -n 1`
+  set_variable GZ_FILE $dumpname
+}
+
+function postgres_get_version() {
+  run_psql_command "select version();"
+}

@@ -1,0 +1,42 @@
+#!/bin/sh
+
+export BLACK_TEXT='\033[0;30m'
+export RED_TEXT='\033[0;31m'
+export BROWN_ORANGE_TEXT='\033[0;33m'
+export PURPLE_TEXT='\033[0;35m'
+export CYAN_TEXT='\033[0;36m'
+export LIGHT_GRAY_TEXT='\033[0;37m'
+export DARK_GRAY_TEXT='\033[1;30m'
+export LIGHT_RED_TEXT='\033[1;31m'
+export LIGHT_GREEN_TEXT='\033[1;32m'
+export YELLOW_TEXT='\033[1;33m'
+export LIGHT_BLUE_TEXT='\033[1;34m'
+export LIGHT_PURPLE_TEXT='\033[1;35m'
+export LIGHT_CYAN_TEXT='\033[1;36m'
+export WHITE_TEXT='\033[1;37m'
+
+
+export BLUE='\033[0;34m'
+export GREEN='\033[0;32m'
+export RED='\033[0;91m'
+export NC='\033[0m' # No Color
+
+export INFO="${BLUE}[INFO]${NC}"
+export SUCCESS="${GREEN}[SUCCESS]${NC}"
+export ERROR="${RED}[ERROR]${NC}"
+export NC="${NC}"
+
+export LINE_BLACK="${BLACK}[==============================================]${NC}"
+export LINE_GRAY="${LGRAY}[==============================================]${NC}"
+
+export LINE_BLUE="${BLUE}[==============================================]${NC}"
+export LINE_GREEN="${GREEN}[==============================================]${NC}"
+export LINE_RED="${RED}[==============================================]${NC}"
+export LINE_NC="${NC}[==============================================]${NC}"
+
+export LINE_BLUE_LONG="${BLUE}[INFO ===============================================================================]${NC}"
+export LINE_RED_LONG="${RED}[FAILURE ============================================================================]${NC}"
+export LINE_GREEN_LONG="${GREEN}[SUCCESS ============================================================================]${NC}"
+export LINE_NC_LONG="${NC}[====================================================================================]${NC}"
+
+

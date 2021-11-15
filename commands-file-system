@@ -1,0 +1,42 @@
+
+source ./commands-colors
+
+function entering() {
+  echo "${INFO} Entering ${1}"
+}
+function exiting() {
+  echo "${INFO} Exiting ${1}"
+}
+
+function check_for_file() {
+  echo "${INFO} Entering check_for_file"
+  echo "${INFO} Checking for $1"
+  if [[ -f $1 ]]; then
+    echo "${SUCCESS} File Exists!"
+    return 1
+  else 
+    echo "${ERROR} $1 Does NOT Exist!"
+    return -1
+  fi
+  echo "${INFO}  Exiting check_for_file"
+}
+
+function check_for_directory() {
+  echo "${INFO} Entering check_for_directory"
+  echo "${INFO} Checking for $1"
+  if [[ -d $1 ]]; then
+    echo "${SUCCESS} Directory Exists!"
+    return 1
+  else 
+    echo "${ERROR} $1 Does NOT Exist!"
+    return -1
+  fi
+  echo "${INFO}  Exiting check_for_directory"
+}
+
+function check_for_directories() {
+  echo "${INFO} Entering check_for_directories"
+  DIRECTORIES_TO_CHECK=${1}
+  print_variable DIRECTORIES_TO_CHECK
+  echo "${INFO} Existing check_for_directories"
+}
