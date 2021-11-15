@@ -1,0 +1,29 @@
+source commands-environment-variables
+print_big_brain_home
+
+set_projects_home
+print_projects_home
+
+set_gitlab_home
+print_gitlab_home
+
+set_variable SOURCE_HOME ${GITLAB_HOME}/source
+print_variable SOURCE_HOME
+
+set_workspace ${PROJECTS_HOME}/workspace
+print_workspace
+
+set_venv_home
+print_venv_home
+
+set_application_code_home
+print_application_code_home
+
+set_my_scripts_home
+print_my_scripts_home
+
+set_my_resources_home $WORKSPACE/resources
+print_my_resources_home
+
+set_test_source_file
+print_test_source_file
